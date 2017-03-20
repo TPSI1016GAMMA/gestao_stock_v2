@@ -46,13 +46,12 @@ public class Product {
         this.nome = nome;
     }
 
-     public HashMap <String, String> getCat() {
-        Set keyset=cat_subcat.keySet();
-        return (HashMap<String, String>) cat_subcat.keySet(); 
+     public String getCat() {
+        return (String) cat_subcat.keySet().toArray()[0]; 
     }
 
-    public HashMap <String, String> getCat_subcat() {
-        return (HashMap<String, String>) cat_subcat.values(); 
+    public String getCat_subcat() {
+        return (String) cat_subcat.values().toArray()[0]; 
     }
 
     public void setCat_subcat(String cat, String subcat) {

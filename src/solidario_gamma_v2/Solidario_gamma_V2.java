@@ -5,6 +5,8 @@
  */
 package solidario_gamma_v2;
 
+import controller.*;
+
 /**
  *
  * @author Missy M, Migthy Arroz e Arkham
@@ -16,6 +18,9 @@ public class Solidario_gamma_V2 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        Product_Controller pc=new Product_Controller();
+        pc.criar_novo(1);
     }
     
 }

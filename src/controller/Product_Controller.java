@@ -5,8 +5,11 @@
  */
 package controller;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Vector;
 import model.*;
 import static solidario_gamma_v2.MockupData.product;
 
@@ -15,8 +18,11 @@ import static solidario_gamma_v2.MockupData.product;
  * @author Missy M, Migthy Arroz e Arkham
  */
 public class Product_Controller {
-    
+
     Scanner scan=new Scanner(System.in);
+    
+    public Product_Controller(){
+    }
 
     public void criar_novo(int barcode) {
         
@@ -41,20 +47,40 @@ public class Product_Controller {
                     System.out.println("Designação do produto:");
                     produto.setNome(scan.nextLine()); 
                     produto.setId_produto(product.size());  
-                    System.out.println("Categoria de produto:");
-                    //Categoria_produto.listar(); //TODO_1 algoritmo pesquisa um de cada e lista
+                    System.out.println("Seleccione a categoria de produto:");                    
+                    Vector temp=new Vector(product.size(), 1);
+                    for(int i=0; i<product.size(); i++){                     
+                        if(temp.contains(product.get(i).getCat())==false) temp.add(product.get(i).getCat());}
+                    for(int i=0; i<temp.capacity(); i++){
+                        System.out.println((i+1) + " - " +temp.get(i));}
                     System.out.println("0 - Criar nova categoria de produto");
                     op=scan.nextInt();
                     if(op==0){
                         System.out.println("Indique o nome da nova categoria de produto");
-                        cat=scan.nextLine();
+                        cat=new Scanner(System.in).nextLine();
                         System.out.println("Indique o nome da nova sub-categoria de produto");
-                        subcat=scan.nextLine();
+                        subcat=new Scanner(System.in).nextLine();
                         produto.setCat_subcat(cat, subcat);
                         System.out.println("Nova categoria "+ produto.getCat() + ", sub-categoria "+ produto.getCat_subcat()+ " criadas." );
                         System.out.flush();
                     }else{
-                    //TODO metodo de seleção com base no algorirmo todo_1
+                        cat=(String) temp.get(op-1);
+                        System.out.println("Seleccione a sub-categoria de produto:"); 
+                        Vector subtemp=new Vector(1, 1);                        
+                         for(int i=0; i<product.size(); i++){                            
+                            if((product.get(i).getCat()).equals(temp.get((op-1)))){
+                            if(subtemp.contains(product.get(i).getCat_subcat())==false) subtemp.add(product.get(i).getCat_subcat());}}                 
+                         for(int i=0; i<subtemp.capacity(); i++){
+                            System.out.println((i+1) + " - " + subtemp.get(i));}                        
+                        System.out.println("0 - Criar nova sub-categoria de produto");
+                        op=scan.nextInt();
+                        if (op!=0) {
+                            subcat=(String) subtemp.get(op-1);
+                        }else{
+                            System.out.println("Indique o nome da nova sub-categoria de produto");
+                            subcat=new Scanner(System.in).nextLine();}
+                        
+                        produto.setCat_subcat(cat, subcat);                   
                     }                                  
                     System.out.println("Indique o Stock minimo do produto:");
                     produto.setStock_minimo(scan.nextFloat()); 

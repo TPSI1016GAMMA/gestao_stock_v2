@@ -98,12 +98,17 @@ public class Product_Controller {
     public void criar_barcode(String nome_produto) throws FileNotFoundException, IOException{        	
 	 
         Code39Bean bean = new Code39Bean();
-        final int dpi = 150;    
+        final int dpi = 150; 
+        //-----------Caminho Geral-----------
+        String path="files/"+nome_produto+"/";
+        
         bean.setModuleWidth(UnitConv.in2mm(1.0f / dpi)); 
         bean.setWideFactor(3);
         bean.doQuietZone(false);
     
-        File outputFile = new File("codigo_barras.png");
+        File outputFile = new File(path+"barras.png");
+        
+        outputFile.getParentFile().mkdirs(); //----Cria as pastas
         OutputStream codigo_barras = new FileOutputStream(outputFile);
         
     try {

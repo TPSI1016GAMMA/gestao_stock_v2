@@ -5,13 +5,21 @@
  */
 package controller;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Vector;
+import java.util.*;
 import model.*;
 import static solidario_gamma_v2.MockupData.product;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.krysalis.barcode4j.impl.code39.Code39Bean;
+import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
+import org.krysalis.barcode4j.tools.UnitConv;
 
 /**
  *
@@ -30,66 +38,85 @@ public class Product_Controller {
         int op=0;
         boolean existe; 
         
-        Product produto = new Product(0, null, null,false, 0, 0); 
-               
+        Product produto = new Product(0, null, null,false, barcode,null, 0);                
         existe=product.contains(produto.getBarcode()==barcode);
-        if(existe==false){              
         
-        switch(barcode){
+        if(existe==false || barcode ==0){       
+                         
+            System.out.println("Indique os dados relativos ao novo produto.");
+            System.out.println("Designação do produto:");
+            produto.setNome(scan.nextLine()); 
+            if(barcode==0){
+                try {
+                    criar_barcode(produto.getNome());
+                } catch (IOException ex) {
+                    Logger.getLogger(Product_Controller.class.getName()).log(Level.SEVERE, null, ex);}}
+            produto.setId_produto(product.size());  
             
-            case 0: //TODO caso produto não tenha codigo de barras (criação manual de código de barras)
-                    //criar função e passar como argumento?
-                break;
-            
-            default:
-                    produto.setBarcode(barcode);       
-                    System.out.println("Indique os dados relativos ao novo produto.");
-                    System.out.println("Designação do produto:");
-                    produto.setNome(scan.nextLine()); 
-                    produto.setId_produto(product.size());  
-                    System.out.println("Seleccione a categoria de produto:");                    
-                    Vector temp=new Vector(product.size(), 1);
-                    for(int i=0; i<product.size(); i++){                     
-                        if(temp.contains(product.get(i).getCat())==false) temp.add(product.get(i).getCat());}
+            System.out.println("Seleccione a categoria de produto:");                    
+            Vector temp=new Vector(product.size(), 1);
+            for(int i=0; i<product.size(); i++){                     
+                if(temp.contains(product.get(i).getCat())==false) temp.add(product.get(i).getCat());}
+            for(int i=0; i<temp.capacity(); i++){
+                System.out.println((i+1) + " - " +temp.get(i));}
+            System.out.println("0 - Criar nova categoria de produto");
+            op=scan.nextInt();
+            if(op==0){
+                System.out.println("Indique o nome da nova categoria de produto");
+                cat=new Scanner(System.in).nextLine();
+                System.out.println("Indique o nome da nova sub-categoria de produto");
+                subcat=new Scanner(System.in).nextLine();
+                produto.setCat_subcat(cat, subcat);
+                System.out.println("Nova categoria "+ produto.getCat() + ", sub-categoria "+ produto.getCat_subcat()+ " criadas." );
+                System.out.flush();
+            }else{
+                cat=(String) temp.get(op-1);
+                System.out.println("Seleccione a sub-categoria de produto:"); 
+                temp.clear();
+                for(int i=0; i<product.size(); i++){                            
+                    if((product.get(i).getCat()).equals(cat)){
+                        if(temp.contains(product.get(i).getCat_subcat())==false) temp.add(product.get(i).getCat_subcat());}}                 
                     for(int i=0; i<temp.capacity(); i++){
-                        System.out.println((i+1) + " - " +temp.get(i));}
-                    System.out.println("0 - Criar nova categoria de produto");
-                    op=scan.nextInt();
-                    if(op==0){
-                        System.out.println("Indique o nome da nova categoria de produto");
-                        cat=new Scanner(System.in).nextLine();
-                        System.out.println("Indique o nome da nova sub-categoria de produto");
-                        subcat=new Scanner(System.in).nextLine();
-                        produto.setCat_subcat(cat, subcat);
-                        System.out.println("Nova categoria "+ produto.getCat() + ", sub-categoria "+ produto.getCat_subcat()+ " criadas." );
-                        System.out.flush();
-                    }else{
-                        cat=(String) temp.get(op-1);
-                        System.out.println("Seleccione a sub-categoria de produto:"); 
-                        Vector subtemp=new Vector(1, 1);                        
-                         for(int i=0; i<product.size(); i++){                            
-                            if((product.get(i).getCat()).equals(temp.get((op-1)))){
-                            if(subtemp.contains(product.get(i).getCat_subcat())==false) subtemp.add(product.get(i).getCat_subcat());}}                 
-                         for(int i=0; i<subtemp.capacity(); i++){
-                            System.out.println((i+1) + " - " + subtemp.get(i));}                        
-                        System.out.println("0 - Criar nova sub-categoria de produto");
-                        op=scan.nextInt();
-                        if (op!=0) {
-                            subcat=(String) subtemp.get(op-1);
-                        }else{
-                            System.out.println("Indique o nome da nova sub-categoria de produto");
-                            subcat=new Scanner(System.in).nextLine();}
-                        
-                        produto.setCat_subcat(cat, subcat);                   
-                    }                                  
-                    System.out.println("Indique o Stock minimo do produto:");
-                    produto.setStock_minimo(scan.nextFloat()); 
-                    product.add(produto);
-            }
+                        System.out.println((i+1) + " - " + temp.get(i));}                        
+                System.out.println("0 - Criar nova sub-categoria de produto");
+                op=scan.nextInt();
+                if (op!=0) {
+                    subcat=(String) temp.get(op-1);
+                }else{
+                    System.out.println("Indique o nome da nova sub-categoria de produto");
+                    subcat=new Scanner(System.in).nextLine();}                        
+                produto.setCat_subcat(cat, subcat);}  
+            
+                System.out.println("Indique o Stock minimo do produto:");
+                produto.setStock_minimo(scan.nextFloat());
+                
+                product.add(produto);            
         }else{   
-        System.out.println("Impossivel criar nova entrada\nProduto já existe na BD"); //TODO melhorar isto
-        }
+        System.out.println("Impossivel criar nova entrada\nProduto já existe na BD");}
     }//Fecha metodo
+        
+    public void criar_barcode(String nome_produto) throws FileNotFoundException, IOException{        	
+	 
+        Code39Bean bean = new Code39Bean();
+        final int dpi = 150;    
+        bean.setModuleWidth(UnitConv.in2mm(1.0f / dpi)); 
+        bean.setWideFactor(3);
+        bean.doQuietZone(false);
+    
+        File outputFile = new File("codigo_barras.png");
+        OutputStream codigo_barras = new FileOutputStream(outputFile);
+        
+    try {
+        BitmapCanvasProvider canvas = new BitmapCanvasProvider(codigo_barras, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+
+        bean.generateBarcode(canvas, nome_produto);
+
+        canvas.finish();
+        
+    } finally {
+        codigo_barras.close();}
+    }//Fecha metodo
+    
 }//Fecha Classe
 
 

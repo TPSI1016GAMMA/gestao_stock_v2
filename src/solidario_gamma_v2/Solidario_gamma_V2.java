@@ -20,7 +20,8 @@ public class Solidario_gamma_V2 {
         // TODO code application logic here
         
         Product_Controller pc=new Product_Controller();
-        pc.criar_novo(1);
+        //Passe o codigo pelo leitor opção 0 para novo produto sem codigo
+        pc.criar_novo(0);
     }
     
 }

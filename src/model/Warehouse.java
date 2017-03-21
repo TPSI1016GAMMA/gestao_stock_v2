@@ -19,6 +19,7 @@ public class Warehouse extends Entity {
     private String nome_armazem;
     private String local;
     private Dummy_funcionario responsavel_de_armazem;
+    
     private String estado;
 
     public Warehouse(int id_armazem, String categoria, String nome_armazem, String local, Dummy_funcionario responsavel_de_armazem, String estado, int id, String name) {

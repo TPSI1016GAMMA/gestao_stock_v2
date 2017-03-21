@@ -19,14 +19,16 @@ public class Product {
     private HashMap <String, String> cat_subcat; 
     private boolean estado_produto;
     private int barcode;
+    private String manualBarcode;
     private float stock_minimo;
 
-    public Product(int id_produto, String nome, HashMap<String, String> cat_subcat, boolean estado_produto, int barcode, float stock_minimo) {
+    public Product(int id_produto, String nome, HashMap<String, String> cat_subcat, boolean estado_produto, int barcode, String manualBarcode, float stock_minimo) {
         this.id_produto = id_produto;
         this.nome = nome;
         this.cat_subcat = new HashMap<>();
         this.estado_produto = estado_produto;
         this.barcode = barcode;
+        this.manualBarcode = manualBarcode;
         this.stock_minimo = stock_minimo;
     }
 
@@ -46,18 +48,6 @@ public class Product {
         this.nome = nome;
     }
 
-     public String getCat() {
-        return (String) cat_subcat.keySet().toArray()[0]; 
-    }
-
-    public String getCat_subcat() {
-        return (String) cat_subcat.values().toArray()[0]; 
-    }
-
-    public void setCat_subcat(String cat, String subcat) {
-        this.cat_subcat.put(cat, subcat);
-    }
-
     public boolean isEstado_produto() {
         return estado_produto;
     }
@@ -74,6 +64,14 @@ public class Product {
         this.barcode = barcode;
     }
 
+    public String getManualBarcode() {
+        return manualBarcode;
+    }
+
+    public void setManualBarcode(String manualBarcode) {
+        this.manualBarcode = manualBarcode;
+    }
+
     public float getStock_minimo() {
         return stock_minimo;
     }
@@ -82,8 +80,15 @@ public class Product {
         this.stock_minimo = stock_minimo;
     }
 
+         public String getCat() {
+        return (String) cat_subcat.keySet().toArray()[0]; 
+    }
 
+    public String getCat_subcat() {
+        return (String) cat_subcat.values().toArray()[0]; 
+    }
 
-   
-
+    public void setCat_subcat(String cat, String subcat) {
+        this.cat_subcat.put(cat, subcat);
+    }
 }

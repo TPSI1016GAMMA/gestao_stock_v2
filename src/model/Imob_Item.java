@@ -17,8 +17,8 @@ public class Imob_Item extends Product {
     private String local;
     private String sala;
 
-    public Imob_Item(int qr_code, String local, String sala, int id_produto, String nome, HashMap<String, String> cat_subcat, boolean estado_produto, int barcode, float stock_minimo) {
-        super(id_produto, nome, cat_subcat, estado_produto, barcode, stock_minimo);
+    public Imob_Item(int qr_code, String local, String sala, int id_produto, String nome, HashMap<String, String> cat_subcat, boolean estado_produto, int barcode, String manualBarcode, float stock_minimo) {
+        super(id_produto, nome, cat_subcat, estado_produto, barcode, manualBarcode, stock_minimo);
         this.qr_code = qr_code;
         this.local = local;
         this.sala = sala;
@@ -47,6 +47,6 @@ public class Imob_Item extends Product {
     public void setSala(String sala) {
         this.sala = sala;
     }
-
     
+
 }

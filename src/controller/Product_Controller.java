@@ -5,6 +5,14 @@
  */
 package controller;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.*;
 import model.*;
 import static solidario_gamma_v2.MockupData.product;
@@ -16,6 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
@@ -85,10 +94,11 @@ public class Product_Controller {
                 produto.setCat_subcat(cat, subcat);} 
             
             if(barcode==0){
-                try {
+                 try {
                     criar_barcode(produto.getNome(),produto.getCat() );
                 } catch (IOException ex) {
-                    Logger.getLogger(Product_Controller.class.getName()).log(Level.SEVERE, null, ex);}}
+                    Logger.getLogger(Product_Controller.class.getName()).log(Level.SEVERE, null, ex);} 
+                criar_qrcode(produto.getNome(),produto.getCat() );}
             
             System.out.println("Indique o Stock minimo do produto:");
             produto.setStock_minimo(scan.nextFloat());
@@ -97,6 +107,37 @@ public class Product_Controller {
         }else{   
         System.out.println("Impossivel criar nova entrada\nProduto já existe na BD");}
     }//Fecha metodo
+
+ public void search_produto(ArrayList<Product> p){
+       
+        //TODO - Fazer return int 
+        
+        //-------------------------
+        
+       String name_temp;
+       System.out.println("Introduza o nome o produto que quer pesquisar");
+       name_temp=new Scanner(System.in).nextLine();
+       
+       for(int i=0;i<p.size();i++){
+           
+           if(name_temp.equals(p.get(i).getNome())){
+               
+               System.out.println("//-------------------------------//");
+               System.out.println("ID           - "+p.get(i).getId_produto());
+               System.out.println("NOME         - "+p.get(i).getNome());
+               System.out.println("Categoria    - "+p.get(i).getCat());
+               System.out.println("Stock        - "+p.get(i).getStock_minimo());
+               //TODO - Em caso ambiente grafico mostrar a imagem do qr do proprio produto
+               return ;
+           }
+       }
+       
+      System.out.println("Não foi encontrado o produto desejado");
+       
+
+
+
+
         
     public void criar_barcode(String nome_produto, String cat_produto) throws FileNotFoundException, IOException{        	
 	 
@@ -125,38 +166,51 @@ public class Product_Controller {
         codigo_barras.close();}
     }//Fecha metodo
     
-    public void search_produto(ArrayList<Product> p){
-       
-        //TODO - Fazer return int 
+    
+     public void criar_qrcode(String nome_produto, String cat_produto){
+         
+         	String myCodeText = nome_produto; //acrecentar todos os detalhes que queremos ter de item de imobilizado
+		String path = cat_produto+"/";
+		int size = 250;
+                String fileType = "png";
+		File myFile = new File(path+nome_produto+".png");
+                myFile.getParentFile().mkdirs();
+                
+		try {
+			
+			Map<EncodeHintType, Object> hintMap = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+			hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");			
+			
+			hintMap.put(EncodeHintType.MARGIN, 1); /* default = 4 */
+			hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+ 
+			QRCodeWriter qrCodeWriter = new QRCodeWriter();
+			BitMatrix byteMatrix = qrCodeWriter.encode(myCodeText, BarcodeFormat.QR_CODE, size,
+					size, hintMap);
+			int width = byteMatrix.getWidth();
+			BufferedImage image = new BufferedImage(width, width,
+					BufferedImage.TYPE_INT_RGB);
+			image.createGraphics();
+ 
+			Graphics2D graphics = (Graphics2D) image.getGraphics();
+			graphics.setColor(Color.WHITE);
+			graphics.fillRect(0, 0, width, width);
+			graphics.setColor(Color.BLACK);
+ 
+			for (int i = 0; i < width; i++) {
+				for (int j = 0; j < width; j++) {
+					if (byteMatrix.get(i, j)) {
+						graphics.fillRect(i, j, 1, 1);}}}
+			ImageIO.write(image, fileType, myFile);
+		} catch (WriterException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("\n\nAVISO: O QR Code gerado deve ser impresso e colado ao novo item de imobilizado");
+	}
         
-        //-------------------------
-        
-       String name_temp;
-       System.out.println("Introduza o nome o produto que quer pesquisar");
-       name_temp=new Scanner(System.in).nextLine();
-       
-       for(int i=0;i<p.size();i++){
-           
-           if(name_temp.equals(p.get(i).getNome())){
-               
-               System.out.println("//-------------------------------//");
-               System.out.println("ID           - "+p.get(i).getId_produto());
-               System.out.println("NOME         - "+p.get(i).getNome());
-               System.out.println("Categoria    - "+p.get(i).getCat());
-               System.out.println("Stock        - "+p.get(i).getStock_minimo());
-               //TODO - Em caso ambiente grafico mostrar a imagem do qr do proprio produto
-               return ;
-           }
-       }
-       
-      System.out.println("Não foi encontrado o produto desejado");
-       
-       
-        
-        
-       
-    }
+    
 }//Fecha Classe
-
 
 

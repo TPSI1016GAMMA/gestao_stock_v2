@@ -125,6 +125,37 @@ public class Product_Controller {
         codigo_barras.close();}
     }//Fecha metodo
     
+    public void search_produto(ArrayList<Product> p){
+       
+        //TODO - Fazer return int 
+        
+        //-------------------------
+        
+       String name_temp;
+       System.out.println("Introduza o nome o produto que quer pesquisar");
+       name_temp=new Scanner(System.in).nextLine();
+       
+       for(int i=0;i<p.size();i++){
+           
+           if(name_temp.equals(p.get(i).getNome())){
+               
+               System.out.println("//-------------------------------//");
+               System.out.println("ID           - "+p.get(i).getId_produto());
+               System.out.println("NOME         - "+p.get(i).getNome());
+               System.out.println("Categoria    - "+p.get(i).getCat());
+               System.out.println("Stock        - "+p.get(i).getStock_minimo());
+               //TODO - Em caso ambiente grafico mostrar a imagem do qr do proprio produto
+               return ;
+           }
+       }
+       
+      System.out.println("Não foi encontrado o produto desejado");
+       
+       
+        
+        
+       
+    }
 }//Fecha Classe
 
 

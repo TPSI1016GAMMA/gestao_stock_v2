@@ -132,7 +132,7 @@ public class Product_Controller {
            }
        }
        
-      System.out.println("Não foi encontrado o produto desejado");
+      System.out.println("Não foi encontrado o produto desejado");}
        
 
 
@@ -140,7 +140,7 @@ public class Product_Controller {
 
         
     public void criar_barcode(String nome_produto, String cat_produto) throws FileNotFoundException, IOException{        	
-	 
+       
         Code39Bean bean = new Code39Bean();
         final int dpi = 150; 
         //-----------Caminho Geral-----------

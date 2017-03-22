@@ -46,11 +46,7 @@ public class Product_Controller {
             System.out.println("Indique os dados relativos ao novo produto.");
             System.out.println("Designação do produto:");
             produto.setNome(scan.nextLine()); 
-            if(barcode==0){
-                try {
-                    criar_barcode(produto.getNome());
-                } catch (IOException ex) {
-                    Logger.getLogger(Product_Controller.class.getName()).log(Level.SEVERE, null, ex);}}
+            
             produto.setId_produto(product.size());  
             
             System.out.println("Seleccione a categoria de produto:");                    
@@ -69,6 +65,7 @@ public class Product_Controller {
                 produto.setCat_subcat(cat, subcat);
                 System.out.println("Nova categoria "+ produto.getCat() + ", sub-categoria "+ produto.getCat_subcat()+ " criadas." );
                 System.out.flush();
+                produto.setCat_subcat(cat, subcat);
             }else{
                 cat=(String) temp.get(op-1);
                 System.out.println("Seleccione a sub-categoria de produto:"); 
@@ -85,22 +82,28 @@ public class Product_Controller {
                 }else{
                     System.out.println("Indique o nome da nova sub-categoria de produto");
                     subcat=new Scanner(System.in).nextLine();}                        
-                produto.setCat_subcat(cat, subcat);}  
+                produto.setCat_subcat(cat, subcat);} 
             
-                System.out.println("Indique o Stock minimo do produto:");
-                produto.setStock_minimo(scan.nextFloat());
+            if(barcode==0){
+                try {
+                    criar_barcode(produto.getNome(),produto.getCat() );
+                } catch (IOException ex) {
+                    Logger.getLogger(Product_Controller.class.getName()).log(Level.SEVERE, null, ex);}}
+            
+            System.out.println("Indique o Stock minimo do produto:");
+            produto.setStock_minimo(scan.nextFloat());
                 
-                product.add(produto);            
+            product.add(produto);            
         }else{   
         System.out.println("Impossivel criar nova entrada\nProduto já existe na BD");}
     }//Fecha metodo
         
-    public void criar_barcode(String nome_produto) throws FileNotFoundException, IOException{        	
+    public void criar_barcode(String nome_produto, String cat_produto) throws FileNotFoundException, IOException{        	
 	 
         Code39Bean bean = new Code39Bean();
         final int dpi = 150; 
         //-----------Caminho Geral-----------
-        String path="files/"+nome_produto+"/";
+        String path=cat_produto+"/"+nome_produto+"/";
         
         bean.setModuleWidth(UnitConv.in2mm(1.0f / dpi)); 
         bean.setWideFactor(3);

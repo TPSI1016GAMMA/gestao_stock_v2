@@ -103,7 +103,7 @@ public class Product_Controller {
         Code39Bean bean = new Code39Bean();
         final int dpi = 150; 
         //-----------Caminho Geral-----------
-        String path=cat_produto+"/";
+        String path="files/cod_barra/"+cat_produto+"/";
         
         bean.setModuleWidth(UnitConv.in2mm(1.0f / dpi)); 
         bean.setWideFactor(3);

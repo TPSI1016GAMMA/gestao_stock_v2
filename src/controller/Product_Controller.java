@@ -126,14 +126,44 @@ public class Product_Controller {
                System.out.println("ID           - "+p.get(i).getId_produto());
                System.out.println("NOME         - "+p.get(i).getNome());
                System.out.println("Categoria    - "+p.get(i).getCat());
-               System.out.println("Stock        - "+p.get(i).getStock_minimo());
+               System.out.println("Sub-Categoria       -"+p.get(i).getCat_subcat());
+               if(p.get(i).isEstado_produto()==true)
+                System.out.println("Estado       - Activo");
+               else
+                System.out.println("Estado       - Inactivo");             
+               
+               System.out.println("Stock Minimo      - "+p.get(i).getStock_minimo());
                //TODO - Em caso ambiente grafico mostrar a imagem do qr do proprio produto
                return ;
            }
        }
        
-      System.out.println("Não foi encontrado o produto desejado");}
+      System.out.println("Não foi encontrado o produto desejado");  
+        
+        
        
+    }//Fim da função do search_produto
+       
+  
+    public void list_produto(ArrayList<Product> p){      
+        
+        for(int i=0;i<p.size();i++){
+        System.out.println("\n//------------------------------------");
+        System.out.println("ID           - "+p.get(i).getId_produto());
+        System.out.println("NOME         - "+p.get(i).getNome());
+        System.out.println("Categoria    - "+p.get(i).getCat());
+        System.out.println("Sub-Categoria       -"+p.get(i).getCat_subcat());
+        if(p.get(i).isEstado_produto()==true)
+            System.out.println("Estado       - Activo");
+        else
+            System.out.println("Estado       - Inactivo");             
+               
+        System.out.println("Stock Minimo     - "+p.get(i).getStock_minimo());
+        
+        
+        }
+        
+    }//Fim da função do list_produto
 
 
 

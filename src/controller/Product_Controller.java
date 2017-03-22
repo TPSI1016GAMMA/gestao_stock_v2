@@ -103,13 +103,13 @@ public class Product_Controller {
         Code39Bean bean = new Code39Bean();
         final int dpi = 150; 
         //-----------Caminho Geral-----------
-        String path=cat_produto+"/"+nome_produto+"/";
+        String path=cat_produto+"/";
         
         bean.setModuleWidth(UnitConv.in2mm(1.0f / dpi)); 
         bean.setWideFactor(3);
         bean.doQuietZone(false);
     
-        File outputFile = new File(path+"barras.png");
+        File outputFile = new File(path+nome_produto+".png");
         
         outputFile.getParentFile().mkdirs(); //----Cria as pastas
         OutputStream codigo_barras = new FileOutputStream(outputFile);
